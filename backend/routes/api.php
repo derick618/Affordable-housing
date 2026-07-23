@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\AllocationController;
+use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\HousingProjectController;
 use App\Http\Controllers\UnitController;
@@ -13,4 +15,11 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::apiResource('housing-projects', HousingProjectController::class);
     Route::apiResource('housing-projects.units', UnitController::class)->shallow();
+
+    Route::apiResource('applications', ApplicationController::class);
+    Route::patch('applications/{application}/review', [ApplicationController::class, 'review']);
+
+    Route::apiResource('allocations', AllocationController::class)->except(['update']);
+    Route::patch('allocations/{allocation}/respond', [AllocationController::class, 'respond']);
+    Route::patch('allocations/{allocation}/confirm', [AllocationController::class, 'confirm']);
 });
