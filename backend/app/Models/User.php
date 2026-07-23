@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -22,6 +23,10 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
+        'phone',
+        'national_id',
+        'address',
     ];
 
     /**
@@ -45,5 +50,40 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function applications(): HasMany
+    {
+        return $this->hasMany(Application::class);
+    }
+
+    public function reviewedApplications(): HasMany
+    {
+        return $this->hasMany(Application::class, 'reviewed_by');
+    }
+
+    public function allocationsMade(): HasMany
+    {
+        return $this->hasMany(Allocation::class, 'allocated_by');
+    }
+
+    public function isSuperAdmin(): bool
+    {
+        return $this->role === 'super_admin';
+    }
+
+    public function isHousingOfficer(): bool
+    {
+        return $this->role === 'housing_officer';
+    }
+
+    public function isAuditor(): bool
+    {
+        return $this->role === 'auditor';
+    }
+
+    public function isApplicant(): bool
+    {
+        return $this->role === 'applicant';
     }
 }
