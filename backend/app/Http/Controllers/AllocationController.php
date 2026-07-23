@@ -19,7 +19,7 @@ class AllocationController extends Controller
 
         $user = $request->user();
 
-        $query = Allocation::with(['unit', 'allocatedBy', 'application.user'])->latest();
+        $query = Allocation::with(['unit.housingProject', 'allocatedBy', 'application.user'])->latest();
 
         if ($user->isApplicant()) {
             $query->whereHas('application', fn ($q) => $q->where('user_id', $user->id));
@@ -61,14 +61,14 @@ class AllocationController extends Controller
             ]);
         });
 
-        return new AllocationResource($allocation->load(['unit', 'application']));
+        return new AllocationResource($allocation->load(['unit.housingProject', 'application']));
     }
 
     public function show(Allocation $allocation)
     {
         $this->authorize('view', $allocation);
 
-        return new AllocationResource($allocation->load(['unit', 'allocatedBy', 'application.user']));
+        return new AllocationResource($allocation->load(['unit.housingProject', 'allocatedBy', 'application.user']));
     }
 
     /**
@@ -91,7 +91,7 @@ class AllocationController extends Controller
             }
         });
 
-        return new AllocationResource($allocation->fresh(['unit', 'application']));
+        return new AllocationResource($allocation->fresh(['unit.housingProject', 'application']));
     }
 
     /**
@@ -119,7 +119,7 @@ class AllocationController extends Controller
             $allocation->unit->update(['status' => 'occupied']);
         });
 
-        return new AllocationResource($allocation->fresh(['unit', 'application']));
+        return new AllocationResource($allocation->fresh(['unit.housingProject', 'application']));
     }
 
     /**
