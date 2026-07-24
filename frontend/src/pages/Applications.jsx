@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import client from '../api/client';
+import { statusBadgeClass } from '../utils/statusBadge';
+import HouseRow from '../components/illustrations/HouseRow';
 
 const emptyForm = {
   housing_project_id: '',
@@ -39,12 +41,15 @@ function ApplicationForm({ onCreated }) {
   }
 
   return (
-    <form className="card" onSubmit={handleSubmit}>
-      <h3>Apply for housing</h3>
-      <div className="field">
-        <label htmlFor="housing_project_id">Preferred project (optional)</label>
+    <form className="card mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2" onSubmit={handleSubmit}>
+      <h3 className="text-base font-semibold text-stone-900 sm:col-span-2 dark:text-white">
+        Apply for housing
+      </h3>
+      <div className="sm:col-span-2">
+        <label htmlFor="housing_project_id" className="field-label">Preferred project (optional)</label>
         <select
           id="housing_project_id"
+          className="field-input"
           value={form.housing_project_id}
           onChange={(e) => setForm({ ...form, housing_project_id: e.target.value })}
         >
@@ -56,48 +61,52 @@ function ApplicationForm({ onCreated }) {
           ))}
         </select>
       </div>
-      <div className="field">
-        <label htmlFor="household_size">Household size</label>
+      <div>
+        <label htmlFor="household_size" className="field-label">Household size</label>
         <input
           id="household_size"
           type="number"
           min="1"
           required
+          className="field-input"
           value={form.household_size}
           onChange={(e) => setForm({ ...form, household_size: e.target.value })}
         />
       </div>
-      <div className="field">
-        <label htmlFor="monthly_income">Monthly income (TZS)</label>
+      <div>
+        <label htmlFor="monthly_income" className="field-label">Monthly income (TZS)</label>
         <input
           id="monthly_income"
           type="number"
           min="0"
           required
+          className="field-input"
           value={form.monthly_income}
           onChange={(e) => setForm({ ...form, monthly_income: e.target.value })}
         />
       </div>
-      <div className="field">
-        <label htmlFor="employment_status">Employment status</label>
+      <div>
+        <label htmlFor="employment_status" className="field-label">Employment status</label>
         <input
           id="employment_status"
+          className="field-input"
           value={form.employment_status}
           onChange={(e) => setForm({ ...form, employment_status: e.target.value })}
         />
       </div>
-      <div className="field">
-        <label htmlFor="preferred_bedrooms">Preferred bedrooms</label>
+      <div>
+        <label htmlFor="preferred_bedrooms" className="field-label">Preferred bedrooms</label>
         <input
           id="preferred_bedrooms"
           type="number"
           min="0"
+          className="field-input"
           value={form.preferred_bedrooms}
           onChange={(e) => setForm({ ...form, preferred_bedrooms: e.target.value })}
         />
       </div>
-      {error && <p className="error-text">{error}</p>}
-      <button type="submit" className="primary" disabled={submitting}>
+      {error && <p className="text-sm text-rose-600 sm:col-span-2 dark:text-rose-400">{error}</p>}
+      <button type="submit" className="btn btn-primary sm:col-span-2 sm:w-fit" disabled={submitting}>
         {submitting ? 'Submitting…' : 'Submit application'}
       </button>
     </form>
@@ -128,21 +137,22 @@ function ReviewControls({ application, onReviewed }) {
 
   if (showRejectForm) {
     return (
-      <form onSubmit={handleReject} style={{ marginTop: 8 }}>
-        <div className="field">
-          <label htmlFor={`reject-reason-${application.id}`}>Reason for rejection</label>
-          <textarea
-            id={`reject-reason-${application.id}`}
-            required
-            value={rejectionReason}
-            onChange={(e) => setRejectionReason(e.target.value)}
-          />
-        </div>
-        <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
-          <button type="submit" disabled={submitting}>
+      <form onSubmit={handleReject} className="mt-3">
+        <label htmlFor={`reject-reason-${application.id}`} className="field-label">
+          Reason for rejection
+        </label>
+        <textarea
+          id={`reject-reason-${application.id}`}
+          required
+          className="field-input"
+          value={rejectionReason}
+          onChange={(e) => setRejectionReason(e.target.value)}
+        />
+        <div className="mt-2 flex gap-2">
+          <button type="submit" className="btn" disabled={submitting}>
             {submitting ? 'Rejecting…' : 'Confirm rejection'}
           </button>
-          <button type="button" disabled={submitting} onClick={() => setShowRejectForm(false)}>
+          <button type="button" className="btn" disabled={submitting} onClick={() => setShowRejectForm(false)}>
             Cancel
           </button>
         </div>
@@ -151,17 +161,22 @@ function ReviewControls({ application, onReviewed }) {
   }
 
   return (
-    <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
-      <button type="button" disabled={submitting} onClick={() => review('under_review')}>
+    <div className="mt-3 flex flex-wrap gap-2">
+      <button type="button" className="btn" disabled={submitting} onClick={() => review('under_review')}>
         Mark under review
       </button>
-      <button type="button" disabled={submitting} onClick={() => review('approved')}>
+      <button type="button" className="btn btn-primary" disabled={submitting} onClick={() => review('approved')}>
         Approve
       </button>
-      <button type="button" disabled={submitting} onClick={() => review('waitlisted')}>
+      <button type="button" className="btn" disabled={submitting} onClick={() => review('waitlisted')}>
         Waitlist
       </button>
-      <button type="button" disabled={submitting} onClick={() => setShowRejectForm(true)}>
+      <button
+        type="button"
+        className="btn text-rose-600 dark:text-rose-400"
+        disabled={submitting}
+        onClick={() => setShowRejectForm(true)}
+      >
         Reject
       </button>
     </div>
@@ -196,16 +211,18 @@ export default function Applications() {
 
   return (
     <div>
-      <div className="page-header">
-        <h1>{isApplicant ? 'My Applications' : 'Applications'}</h1>
+      <div className="mb-6 flex items-center justify-between">
+        <h1 className="text-2xl font-semibold text-stone-900 dark:text-white">
+          {isApplicant ? 'My Applications' : 'Applications'}
+        </h1>
         {isApplicant && (
-          <button type="button" className="primary" onClick={() => setShowForm((v) => !v)}>
+          <button type="button" className="btn btn-primary" onClick={() => setShowForm((v) => !v)}>
             {showForm ? 'Cancel' : 'New Application'}
           </button>
         )}
       </div>
 
-      {error && <p className="error-text">{error}</p>}
+      {error && <p className="mb-4 text-sm text-rose-600 dark:text-rose-400">{error}</p>}
 
       {showForm && (
         <ApplicationForm
@@ -217,37 +234,48 @@ export default function Applications() {
       )}
 
       {loading ? (
-        <p>Loading…</p>
+        <p className="text-stone-500 dark:text-stone-400">Loading…</p>
       ) : applications.length === 0 ? (
-        <p className="hint-text">No applications yet.</p>
+        <div className="card flex flex-col items-center py-14 text-center">
+          <HouseRow className="mb-4 h-28 w-full max-w-xs text-stone-300 dark:text-stone-700" />
+          <p className="text-stone-500 dark:text-stone-400">No applications yet.</p>
+        </div>
       ) : (
-        applications.map((application) => (
-          <div className="card" key={application.id}>
-            <div className="page-header">
-              <div>
-                {!isApplicant && <strong>{application.applicant_name}</strong>}
-                <p className="hint-text">
-                  {application.household_size} people · TZS{' '}
-                  {Number(application.monthly_income).toLocaleString()}/mo
-                  {application.housing_project_name && ` · ${application.housing_project_name}`}
-                </p>
+        <div className="flex flex-col gap-3">
+          {applications.map((application) => (
+            <div className="card" key={application.id}>
+              <div className="flex items-start justify-between gap-2">
+                <div>
+                  {!isApplicant && (
+                    <div className="font-semibold text-stone-900 dark:text-white">
+                      {application.applicant_name}
+                    </div>
+                  )}
+                  <p className="text-sm text-stone-500 dark:text-stone-400">
+                    {application.household_size} people · TZS{' '}
+                    {Number(application.monthly_income).toLocaleString()}/mo
+                    {application.housing_project_name && ` · ${application.housing_project_name}`}
+                  </p>
+                </div>
+                <span className={statusBadgeClass(application.status)}>{application.status}</span>
               </div>
-              <span className={`badge status-${application.status}`}>{application.status}</span>
+
+              {application.status === 'rejected' && application.rejection_reason && (
+                <p className="mt-2 text-sm text-stone-500 dark:text-stone-400">
+                  Reason: {application.rejection_reason}
+                </p>
+              )}
+
+              {isApplicant && ['pending', 'under_review'].includes(application.status) && (
+                <button type="button" className="btn mt-3" onClick={() => handleWithdraw(application.id)}>
+                  Withdraw
+                </button>
+              )}
+
+              {canReview && <ReviewControls application={application} onReviewed={loadApplications} />}
             </div>
-
-            {application.status === 'rejected' && application.rejection_reason && (
-              <p className="hint-text">Reason: {application.rejection_reason}</p>
-            )}
-
-            {isApplicant && ['pending', 'under_review'].includes(application.status) && (
-              <button type="button" onClick={() => handleWithdraw(application.id)}>
-                Withdraw
-              </button>
-            )}
-
-            {canReview && <ReviewControls application={application} onReviewed={loadApplications} />}
-          </div>
-        ))
+          ))}
+        </div>
       )}
     </div>
   );

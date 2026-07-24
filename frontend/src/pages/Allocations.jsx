@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import client from '../api/client';
+import { statusBadgeClass } from '../utils/statusBadge';
+import HouseIcon from '../components/illustrations/HouseIcon';
+import HouseRow from '../components/illustrations/HouseRow';
 
 function AllocationForm({ onCreated }) {
   const [applications, setApplications] = useState([]);
@@ -44,13 +47,16 @@ function AllocationForm({ onCreated }) {
   }
 
   return (
-    <form className="card" onSubmit={handleSubmit}>
-      <h3>Offer a unit</h3>
-      <div className="field">
-        <label htmlFor="application">Approved application</label>
+    <form className="card mb-6 grid grid-cols-1 gap-4 sm:grid-cols-3" onSubmit={handleSubmit}>
+      <h3 className="text-base font-semibold text-stone-900 sm:col-span-3 dark:text-white">
+        Offer a unit
+      </h3>
+      <div>
+        <label htmlFor="application" className="field-label">Approved application</label>
         <select
           id="application"
           required
+          className="field-input"
           value={applicationId}
           onChange={(e) => setApplicationId(e.target.value)}
         >
@@ -62,9 +68,15 @@ function AllocationForm({ onCreated }) {
           ))}
         </select>
       </div>
-      <div className="field">
-        <label htmlFor="project">Housing project</label>
-        <select id="project" required value={projectId} onChange={(e) => setProjectId(e.target.value)}>
+      <div>
+        <label htmlFor="project" className="field-label">Housing project</label>
+        <select
+          id="project"
+          required
+          className="field-input"
+          value={projectId}
+          onChange={(e) => setProjectId(e.target.value)}
+        >
           <option value="">Select…</option>
           {projects.map((project) => (
             <option key={project.id} value={project.id}>
@@ -73,9 +85,15 @@ function AllocationForm({ onCreated }) {
           ))}
         </select>
       </div>
-      <div className="field">
-        <label htmlFor="unit">Available unit</label>
-        <select id="unit" required value={unitId} onChange={(e) => setUnitId(e.target.value)}>
+      <div>
+        <label htmlFor="unit" className="field-label">Available unit</label>
+        <select
+          id="unit"
+          required
+          className="field-input"
+          value={unitId}
+          onChange={(e) => setUnitId(e.target.value)}
+        >
           <option value="">Select…</option>
           {units.map((unit) => (
             <option key={unit.id} value={unit.id}>
@@ -84,8 +102,8 @@ function AllocationForm({ onCreated }) {
           ))}
         </select>
       </div>
-      {error && <p className="error-text">{error}</p>}
-      <button type="submit" className="primary" disabled={submitting}>
+      {error && <p className="text-sm text-rose-600 sm:col-span-3 dark:text-rose-400">{error}</p>}
+      <button type="submit" className="btn btn-primary sm:col-span-3 sm:w-fit" disabled={submitting}>
         {submitting ? 'Saving…' : 'Send offer'}
       </button>
     </form>
@@ -108,11 +126,11 @@ function ApplicantActions({ allocation, onUpdated }) {
   if (allocation.status !== 'offered') return null;
 
   return (
-    <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
-      <button type="button" className="primary" disabled={submitting} onClick={() => respond('accept')}>
+    <div className="mt-3 flex gap-2">
+      <button type="button" className="btn btn-primary" disabled={submitting} onClick={() => respond('accept')}>
         Accept
       </button>
-      <button type="button" disabled={submitting} onClick={() => respond('decline')}>
+      <button type="button" className="btn" disabled={submitting} onClick={() => respond('decline')}>
         Decline
       </button>
     </div>
@@ -149,20 +167,23 @@ function StaffActions({ allocation, onUpdated }) {
 
   if (showConfirmForm) {
     return (
-      <form onSubmit={confirm} style={{ display: 'flex', gap: 8, marginTop: 8, alignItems: 'flex-end' }}>
-        <div className="field">
-          <label htmlFor={`move-in-${allocation.id}`}>Move-in date (optional)</label>
+      <form onSubmit={confirm} className="mt-3 flex items-end gap-2">
+        <div>
+          <label htmlFor={`move-in-${allocation.id}`} className="field-label">
+            Move-in date (optional)
+          </label>
           <input
             id={`move-in-${allocation.id}`}
             type="date"
+            className="field-input"
             value={moveInDate}
             onChange={(e) => setMoveInDate(e.target.value)}
           />
         </div>
-        <button type="submit" className="primary" disabled={submitting}>
+        <button type="submit" className="btn btn-primary" disabled={submitting}>
           {submitting ? 'Confirming…' : 'Confirm'}
         </button>
-        <button type="button" disabled={submitting} onClick={() => setShowConfirmForm(false)}>
+        <button type="button" className="btn" disabled={submitting} onClick={() => setShowConfirmForm(false)}>
           Cancel
         </button>
       </form>
@@ -170,14 +191,19 @@ function StaffActions({ allocation, onUpdated }) {
   }
 
   return (
-    <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
+    <div className="mt-3 flex gap-2">
       {allocation.status === 'accepted' && (
-        <button type="button" className="primary" disabled={submitting} onClick={() => setShowConfirmForm(true)}>
+        <button
+          type="button"
+          className="btn btn-primary"
+          disabled={submitting}
+          onClick={() => setShowConfirmForm(true)}
+        >
           Confirm move-in
         </button>
       )}
       {['offered', 'accepted'].includes(allocation.status) && (
-        <button type="button" disabled={submitting} onClick={cancel}>
+        <button type="button" className="btn" disabled={submitting} onClick={cancel}>
           Cancel
         </button>
       )}
@@ -208,16 +234,18 @@ export default function Allocations() {
 
   return (
     <div>
-      <div className="page-header">
-        <h1>{isApplicant ? 'My Allocation' : 'Allocations'}</h1>
+      <div className="mb-6 flex items-center justify-between">
+        <h1 className="text-2xl font-semibold text-stone-900 dark:text-white">
+          {isApplicant ? 'My Allocation' : 'Allocations'}
+        </h1>
         {canManage && (
-          <button type="button" className="primary" onClick={() => setShowForm((v) => !v)}>
+          <button type="button" className="btn btn-primary" onClick={() => setShowForm((v) => !v)}>
             {showForm ? 'Cancel' : 'Offer a Unit'}
           </button>
         )}
       </div>
 
-      {error && <p className="error-text">{error}</p>}
+      {error && <p className="mb-4 text-sm text-rose-600 dark:text-rose-400">{error}</p>}
 
       {showForm && (
         <AllocationForm
@@ -229,31 +257,43 @@ export default function Allocations() {
       )}
 
       {loading ? (
-        <p>Loading…</p>
+        <p className="text-stone-500 dark:text-stone-400">Loading…</p>
       ) : allocations.length === 0 ? (
-        <p className="hint-text">No allocations yet.</p>
+        <div className="card flex flex-col items-center py-14 text-center">
+          <HouseRow className="mb-4 h-28 w-full max-w-xs text-stone-300 dark:text-stone-700" />
+          <p className="text-stone-500 dark:text-stone-400">No allocations yet.</p>
+        </div>
       ) : (
-        allocations.map((allocation) => (
-          <div className="card" key={allocation.id}>
-            <div className="page-header">
-              <div>
-                <strong>Unit {allocation.unit?.unit_number}</strong>
-                <p className="hint-text">
-                  {allocation.unit?.bedrooms} bed · {allocation.unit?.housing_project_name}
-                </p>
-                {allocation.move_in_date && (
-                  <p className="hint-text">
-                    Move-in: {new Date(allocation.move_in_date).toLocaleDateString()}
-                  </p>
-                )}
+        <div className="flex flex-col gap-3">
+          {allocations.map((allocation) => (
+            <div className="card flex gap-4" key={allocation.id}>
+              <div className="hidden h-16 w-16 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-amber-400 to-amber-600 sm:flex">
+                <HouseIcon className="h-9 w-9 text-white/90" />
               </div>
-              <span className={`badge status-${allocation.status}`}>{allocation.status}</span>
-            </div>
+              <div className="flex-1">
+                <div className="flex items-start justify-between gap-2">
+                  <div>
+                    <div className="font-semibold text-stone-900 dark:text-white">
+                      Unit {allocation.unit?.unit_number}
+                    </div>
+                    <p className="text-sm text-stone-500 dark:text-stone-400">
+                      {allocation.unit?.bedrooms} bed · {allocation.unit?.housing_project_name}
+                    </p>
+                    {allocation.move_in_date && (
+                      <p className="text-sm text-stone-500 dark:text-stone-400">
+                        Move-in: {new Date(allocation.move_in_date).toLocaleDateString()}
+                      </p>
+                    )}
+                  </div>
+                  <span className={statusBadgeClass(allocation.status)}>{allocation.status}</span>
+                </div>
 
-            {isApplicant && <ApplicantActions allocation={allocation} onUpdated={loadAllocations} />}
-            {canManage && <StaffActions allocation={allocation} onUpdated={loadAllocations} />}
-          </div>
-        ))
+                {isApplicant && <ApplicantActions allocation={allocation} onUpdated={loadAllocations} />}
+                {canManage && <StaffActions allocation={allocation} onUpdated={loadAllocations} />}
+              </div>
+            </div>
+          ))}
+        </div>
       )}
     </div>
   );

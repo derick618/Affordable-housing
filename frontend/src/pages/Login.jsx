@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import HouseRow from '../components/illustrations/HouseRow';
 
 export default function Login() {
   const { user, login } = useAuth();
@@ -30,42 +31,80 @@ export default function Login() {
   }
 
   return (
-    <div className="auth-page">
-      <div className="auth-card">
-        <h1>Affordable Housing</h1>
-        <p className="hint-text">Sign in to continue</p>
+    <div className="flex min-h-svh w-full">
+      <div className="relative hidden w-1/2 flex-col justify-between overflow-hidden bg-amber-600 p-12 text-amber-50 lg:flex dark:bg-amber-800">
+        <div>
+          <div className="text-lg font-bold">Affordable Housing</div>
+          <p className="mt-1 text-sm text-amber-100/80">Dar es Salaam</p>
+        </div>
 
-        <form onSubmit={handleSubmit}>
-          <div className="field">
-            <label htmlFor="email">Email</label>
-            <input
-              id="email"
-              type="email"
-              required
-              autoComplete="username"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
+        <div>
+          <h2 className="text-3xl leading-tight font-semibold text-white">
+            Fair access to housing,
+            <br />
+            from application to move-in.
+          </h2>
+          <p className="mt-3 max-w-sm text-sm text-amber-100/80">
+            Apply for housing, track your application, and manage allocations — all in one
+            place.
+          </p>
+        </div>
+
+        <HouseRow className="h-40 w-full text-amber-100/90" />
+      </div>
+
+      <div className="flex w-full flex-1 items-center justify-center p-6 lg:w-1/2">
+        <div className="w-full max-w-sm">
+          <div className="mb-8 lg:hidden">
+            <div className="text-lg font-bold text-stone-900 dark:text-white">
+              Affordable Housing
+            </div>
+            <p className="text-sm text-stone-500 dark:text-stone-400">Dar es Salaam</p>
           </div>
 
-          <div className="field">
-            <label htmlFor="password">Password</label>
-            <input
-              id="password"
-              type="password"
-              required
-              autoComplete="current-password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </div>
+          <h1 className="text-2xl font-semibold text-stone-900 dark:text-white">Welcome back</h1>
+          <p className="mt-1 text-sm text-stone-500 dark:text-stone-400">
+            Sign in to continue to your account
+          </p>
 
-          {error && <p className="error-text">{error}</p>}
+          <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-4">
+            <div>
+              <label htmlFor="email" className="field-label">
+                Email
+              </label>
+              <input
+                id="email"
+                type="email"
+                required
+                autoComplete="username"
+                className="field-input"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </div>
 
-          <button type="submit" className="primary" disabled={submitting}>
-            {submitting ? 'Signing in…' : 'Sign in'}
-          </button>
-        </form>
+            <div>
+              <label htmlFor="password" className="field-label">
+                Password
+              </label>
+              <input
+                id="password"
+                type="password"
+                required
+                autoComplete="current-password"
+                className="field-input"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </div>
+
+            {error && <p className="text-sm text-rose-600 dark:text-rose-400">{error}</p>}
+
+            <button type="submit" className="btn btn-primary mt-2 w-full" disabled={submitting}>
+              {submitting ? 'Signing in…' : 'Sign in'}
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   );
