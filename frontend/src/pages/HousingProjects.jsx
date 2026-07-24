@@ -5,6 +5,7 @@ import client from '../api/client';
 import { statusBadgeClass } from '../utils/statusBadge';
 import HouseIcon from '../components/illustrations/HouseIcon';
 import HouseRow from '../components/illustrations/HouseRow';
+import Pagination from '../components/Pagination';
 
 const emptyForm = { name: '', description: '', address: '', ward: '', district: '', status: 'planned' };
 
@@ -21,6 +22,8 @@ export default function HousingProjects() {
   const canManage = user.role === 'housing_officer' || user.role === 'super_admin';
 
   const [projects, setProjects] = useState([]);
+  const [meta, setMeta] = useState(null);
+  const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showForm, setShowForm] = useState(false);
@@ -30,13 +33,16 @@ export default function HousingProjects() {
   function loadProjects() {
     setLoading(true);
     client
-      .get('/api/housing-projects')
-      .then(({ data }) => setProjects(data.data))
+      .get('/api/housing-projects', { params: { page } })
+      .then(({ data }) => {
+        setProjects(data.data);
+        setMeta(data.meta);
+      })
       .catch(() => setError('Could not load housing projects.'))
       .finally(() => setLoading(false));
   }
 
-  useEffect(loadProjects, []);
+  useEffect(loadProjects, [page]);
 
   async function handleCreate(event) {
     event.preventDefault();
@@ -174,6 +180,8 @@ export default function HousingProjects() {
           ))}
         </div>
       )}
+
+      <Pagination meta={meta} onPageChange={setPage} />
     </div>
   );
 }

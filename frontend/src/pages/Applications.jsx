@@ -3,6 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import client from '../api/client';
 import { statusBadgeClass } from '../utils/statusBadge';
 import HouseRow from '../components/illustrations/HouseRow';
+import Pagination from '../components/Pagination';
 
 const emptyForm = {
   housing_project_id: '',
@@ -189,6 +190,8 @@ export default function Applications() {
   const canReview = user.role === 'housing_officer' || user.role === 'super_admin';
 
   const [applications, setApplications] = useState([]);
+  const [meta, setMeta] = useState(null);
+  const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showForm, setShowForm] = useState(false);
@@ -196,13 +199,16 @@ export default function Applications() {
   function loadApplications() {
     setLoading(true);
     client
-      .get('/api/applications')
-      .then(({ data }) => setApplications(data.data))
+      .get('/api/applications', { params: { page } })
+      .then(({ data }) => {
+        setApplications(data.data);
+        setMeta(data.meta);
+      })
       .catch(() => setError('Could not load applications.'))
       .finally(() => setLoading(false));
   }
 
-  useEffect(loadApplications, []);
+  useEffect(loadApplications, [page]);
 
   async function handleWithdraw(id) {
     await client.delete(`/api/applications/${id}`);
@@ -277,6 +283,8 @@ export default function Applications() {
           ))}
         </div>
       )}
+
+      <Pagination meta={meta} onPageChange={setPage} />
     </div>
   );
 }

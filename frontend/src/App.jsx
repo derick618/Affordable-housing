@@ -3,11 +3,13 @@ import { useAuth } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import AppLayout from './layouts/AppLayout';
 import Login from './pages/Login';
+import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import HousingProjects from './pages/HousingProjects';
 import HousingProjectDetail from './pages/HousingProjectDetail';
 import Applications from './pages/Applications';
 import Allocations from './pages/Allocations';
+import Users from './pages/Users';
 
 function Home() {
   const { user } = useAuth();
@@ -18,6 +20,7 @@ export default function App() {
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
 
       <Route element={<ProtectedRoute />}>
         <Route element={<AppLayout />}>
@@ -26,6 +29,10 @@ export default function App() {
           <Route path="/housing-projects/:id" element={<HousingProjectDetail />} />
           <Route path="/applications" element={<Applications />} />
           <Route path="/allocations" element={<Allocations />} />
+
+          <Route element={<ProtectedRoute roles={['super_admin']} />}>
+            <Route path="/users" element={<Users />} />
+          </Route>
         </Route>
       </Route>
 

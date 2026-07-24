@@ -26,13 +26,19 @@ export function AuthProvider({ children }) {
     await fetchUser();
   }, [fetchUser]);
 
+  const register = useCallback(async (payload) => {
+    await ensureCsrfCookie();
+    await client.post('/api/register', payload);
+    await fetchUser();
+  }, [fetchUser]);
+
   const logout = useCallback(async () => {
     await client.post('/api/logout');
     setUser(null);
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout }}>
+    <AuthContext.Provider value={{ user, loading, login, register, logout }}>
       {children}
     </AuthContext.Provider>
   );

@@ -4,6 +4,7 @@ import client from '../api/client';
 import { statusBadgeClass } from '../utils/statusBadge';
 import HouseIcon from '../components/illustrations/HouseIcon';
 import HouseRow from '../components/illustrations/HouseRow';
+import Pagination from '../components/Pagination';
 
 function AllocationForm({ onCreated }) {
   const [applications, setApplications] = useState([]);
@@ -217,6 +218,8 @@ export default function Allocations() {
   const canManage = user.role === 'housing_officer' || user.role === 'super_admin';
 
   const [allocations, setAllocations] = useState([]);
+  const [meta, setMeta] = useState(null);
+  const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showForm, setShowForm] = useState(false);
@@ -224,13 +227,16 @@ export default function Allocations() {
   function loadAllocations() {
     setLoading(true);
     client
-      .get('/api/allocations')
-      .then(({ data }) => setAllocations(data.data))
+      .get('/api/allocations', { params: { page } })
+      .then(({ data }) => {
+        setAllocations(data.data);
+        setMeta(data.meta);
+      })
       .catch(() => setError('Could not load allocations.'))
       .finally(() => setLoading(false));
   }
 
-  useEffect(loadAllocations, []);
+  useEffect(loadAllocations, [page]);
 
   return (
     <div>
@@ -295,6 +301,8 @@ export default function Allocations() {
           ))}
         </div>
       )}
+
+      <Pagination meta={meta} onPageChange={setPage} />
     </div>
   );
 }
