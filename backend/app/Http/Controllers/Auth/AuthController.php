@@ -3,13 +3,35 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\RegisterRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
+    /**
+     * Public self-registration always creates an applicant account;
+     * staff accounts are created by a super admin via the users API.
+     */
+    public function register(RegisterRequest $request)
+    {
+        $user = User::create([
+            'name' => $request->validated('name'),
+            'email' => $request->validated('email'),
+            'password' => Hash::make($request->validated('password')),
+            'phone' => $request->validated('phone'),
+            'role' => 'applicant',
+        ]);
+
+        Auth::login($user);
+        $request->session()->regenerate();
+
+        return response()->json(['user' => $user], 201);
+    }
+
     public function login(Request $request)
     {
         $credentials = $request->validate([
