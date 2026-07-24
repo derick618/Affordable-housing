@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\RegisterRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
@@ -26,10 +25,9 @@ class AuthController extends Controller
             'role' => 'applicant',
         ]);
 
-        Auth::login($user);
-        $request->session()->regenerate();
+        $token = $user->createToken('spa')->plainTextToken;
 
-        return response()->json(['user' => $user], 201);
+        return response()->json(['user' => $user, 'token' => $token], 201);
     }
 
     public function login(Request $request)
@@ -39,23 +37,22 @@ class AuthController extends Controller
             'password' => ['required', 'string'],
         ]);
 
-        if (! Auth::attempt($credentials)) {
+        $user = User::where('email', $credentials['email'])->first();
+
+        if (! $user || ! Hash::check($credentials['password'], $user->password)) {
             throw ValidationException::withMessages([
                 'email' => ['The provided credentials are incorrect.'],
             ]);
         }
 
-        $request->session()->regenerate();
+        $token = $user->createToken('spa')->plainTextToken;
 
-        return response()->json(['user' => Auth::user()]);
+        return response()->json(['user' => $user, 'token' => $token]);
     }
 
     public function logout(Request $request)
     {
-        Auth::guard('web')->logout();
-
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
+        $request->user()->currentAccessToken()->delete();
 
         return response()->noContent();
     }

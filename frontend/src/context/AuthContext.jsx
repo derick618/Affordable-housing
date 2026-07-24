@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useState } from 'react';
-import client, { ensureCsrfCookie } from '../api/client';
+import client, { setAuthToken } from '../api/client';
 
 const AuthContext = createContext(null);
 
@@ -12,6 +12,7 @@ export function AuthProvider({ children }) {
       const { data } = await client.get('/api/user');
       setUser(data.user);
     } catch {
+      setAuthToken(null);
       setUser(null);
     }
   }, []);
@@ -21,19 +22,20 @@ export function AuthProvider({ children }) {
   }, [fetchUser]);
 
   const login = useCallback(async (email, password) => {
-    await ensureCsrfCookie();
-    await client.post('/api/login', { email, password });
-    await fetchUser();
-  }, [fetchUser]);
+    const { data } = await client.post('/api/login', { email, password });
+    setAuthToken(data.token);
+    setUser(data.user);
+  }, []);
 
   const register = useCallback(async (payload) => {
-    await ensureCsrfCookie();
-    await client.post('/api/register', payload);
-    await fetchUser();
-  }, [fetchUser]);
+    const { data } = await client.post('/api/register', payload);
+    setAuthToken(data.token);
+    setUser(data.user);
+  }, []);
 
   const logout = useCallback(async () => {
     await client.post('/api/logout');
+    setAuthToken(null);
     setUser(null);
   }, []);
 
