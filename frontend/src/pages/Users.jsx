@@ -155,7 +155,7 @@ export default function Users() {
   return (
     <div>
       <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-2xl font-semibold text-stone-900 dark:text-white">Users</h1>
+        <h1 className="text-2xl font-extrabold tracking-tight text-stone-900 dark:text-white">Users</h1>
         <button type="button" className="btn btn-primary" onClick={() => setShowForm((v) => !v)}>
           {showForm ? 'Cancel' : 'New Staff Account'}
         </button>

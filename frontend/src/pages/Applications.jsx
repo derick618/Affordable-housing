@@ -218,7 +218,7 @@ export default function Applications() {
   return (
     <div>
       <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-2xl font-semibold text-stone-900 dark:text-white">
+        <h1 className="text-2xl font-extrabold tracking-tight text-stone-900 dark:text-white">
           {isApplicant ? 'My Applications' : 'Applications'}
         </h1>
         {isApplicant && (

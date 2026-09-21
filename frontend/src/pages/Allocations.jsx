@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import client from '../api/client';
 import { statusBadgeClass } from '../utils/statusBadge';
-import HouseIcon from '../components/illustrations/HouseIcon';
+import PropertyImage from '../components/PropertyImage';
+import { projectImage } from '../utils/images';
 import HouseRow from '../components/illustrations/HouseRow';
 import Pagination from '../components/Pagination';
 
@@ -241,7 +242,7 @@ export default function Allocations() {
   return (
     <div>
       <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-2xl font-semibold text-stone-900 dark:text-white">
+        <h1 className="text-2xl font-extrabold tracking-tight text-stone-900 dark:text-white">
           {isApplicant ? 'My Allocation' : 'Allocations'}
         </h1>
         {canManage && (
@@ -273,9 +274,13 @@ export default function Allocations() {
         <div className="flex flex-col gap-3">
           {allocations.map((allocation) => (
             <div className="card flex gap-4" key={allocation.id}>
-              <div className="hidden h-16 w-16 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-amber-400 to-amber-600 sm:flex">
-                <HouseIcon className="h-9 w-9 text-white/90" />
-              </div>
+              <PropertyImage
+                src={projectImage(allocation.unit?.housing_project_id)}
+                alt=""
+                size="sm"
+                sizes="96px"
+                className="hidden h-20 w-24 shrink-0 rounded-xl sm:block"
+              />
               <div className="flex-1">
                 <div className="flex items-start justify-between gap-2">
                   <div>

@@ -1,6 +1,8 @@
-import { NavLink, Outlet } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import HouseIcon from '../components/illustrations/HouseIcon';
+import Logo from '../components/Logo';
+import { ArrowLeftIcon, CloseIcon, LogoutIcon, MenuIcon } from '../components/icons';
 
 const ROLE_LABELS = {
   applicant: 'Applicant',
@@ -11,9 +13,9 @@ const ROLE_LABELS = {
 
 function navLinkClass({ isActive }) {
   return [
-    'block rounded-lg px-3 py-2 text-sm font-medium transition',
+    'flex min-h-11 items-center rounded-xl px-3 text-sm font-semibold transition',
     isActive
-      ? 'bg-amber-100 text-amber-800 dark:bg-amber-500/15 dark:text-amber-300'
+      ? 'bg-brand-50 text-brand-800 dark:bg-brand-500/15 dark:text-brand-200'
       : 'text-stone-600 hover:bg-stone-100 dark:text-stone-300 dark:hover:bg-stone-800',
   ].join(' ');
 }
@@ -27,23 +29,26 @@ function initials(name) {
     .toUpperCase();
 }
 
-export default function AppLayout() {
-  const { user, logout } = useAuth();
-  const isStaff = user.role === 'housing_officer' || user.role === 'super_admin';
+function SidebarContent({ user, logout }) {
   const canSeeDashboard = user.role !== 'applicant';
 
   return (
-    <div className="flex min-h-svh">
-      <nav className="flex w-60 shrink-0 flex-col gap-1 border-r border-stone-200 p-4 dark:border-stone-800">
-        <div className="mb-6 flex items-center gap-2 px-2">
-          <HouseIcon className="h-6 w-6 text-amber-600 dark:text-amber-400" />
-          <span className="text-sm font-bold text-stone-900 dark:text-white">
-            Affordable Housing
-          </span>
-        </div>
+    <>
+      <div className="mb-6 px-1">
+        <Logo />
+      </div>
 
+      <Link
+        to="/properties"
+        className="mb-3 flex min-h-11 items-center gap-2 rounded-xl px-3 text-sm font-semibold text-stone-500 hover:bg-stone-100 hover:text-stone-800 dark:text-stone-400 dark:hover:bg-stone-800 dark:hover:text-white"
+      >
+        <ArrowLeftIcon className="h-4 w-4" />
+        Browse homes
+      </Link>
+
+      <div className="flex flex-col gap-1">
         {canSeeDashboard && (
-          <NavLink to="/" end className={navLinkClass}>
+          <NavLink to="/dashboard" end className={navLinkClass}>
             Dashboard
           </NavLink>
         )}
@@ -61,39 +66,88 @@ export default function AppLayout() {
             Users
           </NavLink>
         )}
+      </div>
 
-        <div className="mt-auto flex items-center gap-3 border-t border-stone-200 pt-4 dark:border-stone-800">
-          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-amber-600 text-sm font-semibold text-white dark:bg-amber-500">
-            {initials(user.name)}
-          </div>
-          <div className="min-w-0 flex-1">
-            <div className="truncate text-sm font-medium text-stone-900 dark:text-white">
-              {user.name}
-            </div>
-            <div className="truncate text-xs text-stone-500 dark:text-stone-400">
-              {ROLE_LABELS[user.role] ?? user.role}
-            </div>
-          </div>
-          <button
-            type="button"
-            onClick={logout}
-            title="Log out"
-            className="rounded-lg p-1.5 text-stone-400 transition hover:bg-stone-100 hover:text-stone-700 dark:hover:bg-stone-800 dark:hover:text-stone-200"
-          >
-            <svg viewBox="0 0 24 24" fill="none" className="h-4 w-4">
-              <path
-                d="M15 17l5-5-5-5M20 12H9M12 19H6a2 2 0 01-2-2V7a2 2 0 012-2h6"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </button>
+      <div className="mt-auto flex items-center gap-3 border-t border-stone-200 pt-4 dark:border-stone-800">
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand-700 text-sm font-bold text-white dark:bg-brand-600">
+          {initials(user.name)}
         </div>
+        <div className="min-w-0 flex-1">
+          <div className="truncate text-sm font-semibold text-stone-900 dark:text-white">{user.name}</div>
+          <div className="truncate text-xs text-stone-500 dark:text-stone-400">
+            {ROLE_LABELS[user.role] ?? user.role}
+          </div>
+        </div>
+        <button
+          type="button"
+          onClick={logout}
+          title="Log out"
+          aria-label="Log out"
+          className="flex h-10 w-10 items-center justify-center rounded-xl text-stone-400 transition hover:bg-stone-100 hover:text-stone-700 dark:hover:bg-stone-800 dark:hover:text-stone-200"
+        >
+          <LogoutIcon className="h-4 w-4" />
+        </button>
+      </div>
+    </>
+  );
+}
+
+export default function AppLayout() {
+  const { user, logout } = useAuth();
+  const isStaff = user.role === 'housing_officer' || user.role === 'super_admin';
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const { pathname } = useLocation();
+
+  // Close the mobile drawer after navigating.
+  useEffect(() => setDrawerOpen(false), [pathname]);
+
+  useEffect(() => {
+    if (!drawerOpen) return;
+    const onKey = (e) => e.key === 'Escape' && setDrawerOpen(false);
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [drawerOpen]);
+
+  return (
+    <div className="flex min-h-svh flex-col md:flex-row">
+      {/* Mobile top bar */}
+      <header className="sticky top-0 z-30 flex h-14 items-center justify-between border-b border-stone-200 bg-white/95 px-4 backdrop-blur md:hidden dark:border-stone-800 dark:bg-stone-950/95">
+        <Logo />
+        <button
+          type="button"
+          onClick={() => setDrawerOpen(true)}
+          aria-label="Open menu"
+          aria-expanded={drawerOpen}
+          className="-mr-2 flex h-11 w-11 items-center justify-center rounded-xl text-stone-700 hover:bg-stone-100 dark:text-stone-200 dark:hover:bg-stone-800"
+        >
+          <MenuIcon className="h-6 w-6" />
+        </button>
+      </header>
+
+      {/* Mobile drawer */}
+      {drawerOpen && (
+        <div className="fixed inset-0 z-40 md:hidden" role="dialog" aria-modal="true" aria-label="Menu">
+          <div className="absolute inset-0 bg-stone-950/50" onClick={() => setDrawerOpen(false)} />
+          <nav className="absolute inset-y-0 left-0 flex w-72 max-w-[85%] flex-col bg-white p-4 shadow-2xl dark:bg-stone-950">
+            <button
+              type="button"
+              onClick={() => setDrawerOpen(false)}
+              aria-label="Close menu"
+              className="absolute top-3 right-3 flex h-10 w-10 items-center justify-center rounded-full text-stone-500 hover:bg-stone-100 dark:hover:bg-stone-800"
+            >
+              <CloseIcon className="h-5 w-5" />
+            </button>
+            <SidebarContent user={user} logout={logout} />
+          </nav>
+        </div>
+      )}
+
+      {/* Desktop sidebar */}
+      <nav className="sticky top-0 hidden h-svh w-64 shrink-0 flex-col border-r border-stone-200 bg-white p-4 md:flex dark:border-stone-800 dark:bg-stone-950">
+        <SidebarContent user={user} logout={logout} />
       </nav>
 
-      <main className="flex-1 overflow-y-auto p-8">
+      <main className="min-w-0 flex-1 p-4 sm:p-6 lg:p-8">
         <div className="mx-auto max-w-5xl">
           <Outlet context={{ user, isStaff }} />
         </div>

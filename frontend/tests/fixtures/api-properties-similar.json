@@ -1,0 +1,160 @@
+{
+  "data": [
+    {
+      "id": 3,
+      "slug": "1-bedroom-apartment-kinondoni",
+      "title": "1 Bedroom Apartment",
+      "summary": "Neat one bedroom flat with kitchen cabinets and a wardrobe, in a small block where the landlord lives on site.",
+      "property_type": "apartment",
+      "monthly_rent": 350000,
+      "currency": "TZS",
+      "rent_advance_months": 3,
+      "bedrooms": 1,
+      "bathrooms": 1,
+      "size_sqm": 48,
+      "furnishing": "semi_furnished",
+      "address_line": "Kinondoni Shamba, a few minutes from Kinondoni Road",
+      "location": {
+        "id": 8,
+        "name": "Kinondoni",
+        "slug": "kinondoni",
+        "type": "area",
+        "parent_slug": "dar-es-salaam",
+        "latitude": null,
+        "longitude": null
+      },
+      "location_path": [
+        {
+          "slug": "dar-es-salaam",
+          "name": "Dar es Salaam",
+          "type": "city"
+        },
+        {
+          "slug": "kinondoni",
+          "name": "Kinondoni",
+          "type": "area"
+        }
+      ],
+      "availability_status": "available",
+      "available_from": "2026-09-30",
+      "verified": true,
+      "featured": true,
+      "is_demo": true,
+      "published_at": "2026-09-19T20:08:53.000000Z",
+      "updated_at": "2026-09-19T20:08:53.000000Z",
+      "cover_image": {
+        "id": 9,
+        "url": "http://127.0.0.1:5173/images/properties/kinondoni-apartment.jpg",
+        "thumb_url": "http://127.0.0.1:5173/images/properties/kinondoni-apartment-sm.jpg",
+        "alt_text": null,
+        "position": 0,
+        "width": 1200,
+        "height": 800
+      }
+    },
+    {
+      "id": 2,
+      "slug": "affordable-family-house-sinza",
+      "title": "Affordable Family House",
+      "summary": "Detached 3 bedroom house in a walled compound with a garden, a short walk from schools and Sinza market.",
+      "property_type": "house",
+      "monthly_rent": 500000,
+      "currency": "TZS",
+      "rent_advance_months": 3,
+      "bedrooms": 3,
+      "bathrooms": 2,
+      "size_sqm": 120,
+      "furnishing": "unfurnished",
+      "address_line": "Sinza Mori, 300 m off Sam Nujoma Road",
+      "location": {
+        "id": 16,
+        "name": "Sinza",
+        "slug": "sinza",
+        "type": "area",
+        "parent_slug": "dar-es-salaam",
+        "latitude": null,
+        "longitude": null
+      },
+      "location_path": [
+        {
+          "slug": "dar-es-salaam",
+          "name": "Dar es Salaam",
+          "type": "city"
+        },
+        {
+          "slug": "sinza",
+          "name": "Sinza",
+          "type": "area"
+        }
+      ],
+      "availability_status": "available",
+      "available_from": "2026-09-20",
+      "verified": true,
+      "featured": true,
+      "is_demo": true,
+      "published_at": "2026-09-14T20:08:53.000000Z",
+      "updated_at": "2026-09-18T20:08:53.000000Z",
+      "cover_image": {
+        "id": 5,
+        "url": "http://127.0.0.1:5173/images/properties/sinza-family-house.jpg",
+        "thumb_url": "http://127.0.0.1:5173/images/properties/sinza-family-house-sm.jpg",
+        "alt_text": null,
+        "position": 0,
+        "width": 1200,
+        "height": 900
+      }
+    },
+    {
+      "id": 4,
+      "slug": "3-bedroom-family-home-kigamboni",
+      "title": "3 Bedroom Family Home",
+      "summary": "Spacious family home on a large plot with a garden, covered veranda and servant quarter, in a green part of Kibada.",
+      "property_type": "house",
+      "monthly_rent": 800000,
+      "currency": "TZS",
+      "rent_advance_months": 6,
+      "bedrooms": 3,
+      "bathrooms": 2,
+      "size_sqm": 150,
+      "furnishing": "unfurnished",
+      "address_line": "Kibada, 10 minutes from the Kigamboni ferry",
+      "location": {
+        "id": 7,
+        "name": "Kigamboni",
+        "slug": "kigamboni",
+        "type": "area",
+        "parent_slug": "dar-es-salaam",
+        "latitude": null,
+        "longitude": null
+      },
+      "location_path": [
+        {
+          "slug": "dar-es-salaam",
+          "name": "Dar es Salaam",
+          "type": "city"
+        },
+        {
+          "slug": "kigamboni",
+          "name": "Kigamboni",
+          "type": "area"
+        }
+      ],
+      "availability_status": "available",
+      "available_from": "2026-09-20",
+      "verified": true,
+      "featured": true,
+      "is_demo": true,
+      "published_at": "2026-09-11T20:08:53.000000Z",
+      "updated_at": "2026-09-16T20:08:53.000000Z",
+      "cover_image": {
+        "id": 13,
+        "url": "http://127.0.0.1:5173/images/properties/kigamboni-home.jpg",
+        "thumb_url": "http://127.0.0.1:5173/images/properties/kigamboni-home-sm.jpg",
+        "alt_text": null,
+        "position": 0,
+        "width": 1200,
+        "height": 800
+      }
+    }
+  ]
+}

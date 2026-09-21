@@ -3,19 +3,12 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import client from '../api/client';
 import { statusBadgeClass } from '../utils/statusBadge';
-import HouseIcon from '../components/illustrations/HouseIcon';
+import PropertyImage from '../components/PropertyImage';
+import { projectImage } from '../utils/images';
 import HouseRow from '../components/illustrations/HouseRow';
 import Pagination from '../components/Pagination';
 
 const emptyForm = { name: '', description: '', address: '', ward: '', district: '', status: 'planned' };
-
-const BANNER_COLORS = [
-  'from-amber-400 to-amber-600',
-  'from-teal-400 to-teal-600',
-  'from-sky-400 to-sky-600',
-  'from-rose-400 to-rose-600',
-  'from-emerald-400 to-emerald-600',
-];
 
 export default function HousingProjects() {
   const { user } = useAuth();
@@ -62,8 +55,8 @@ export default function HousingProjects() {
 
   return (
     <div>
-      <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-2xl font-semibold text-stone-900 dark:text-white">Housing Projects</h1>
+      <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
+        <h1 className="text-2xl font-extrabold tracking-tight text-stone-900 dark:text-white">Housing Projects</h1>
         {canManage && (
           <button type="button" className="btn btn-primary" onClick={() => setShowForm((v) => !v)}>
             {showForm ? 'Cancel' : 'New Project'}
@@ -149,20 +142,23 @@ export default function HousingProjects() {
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {projects.map((project, i) => (
+          {projects.map((project) => (
             <Link
               to={`/housing-projects/${project.id}`}
               key={project.id}
-              className="group overflow-hidden rounded-xl border border-stone-200 bg-white shadow-sm transition hover:shadow-md dark:border-stone-800 dark:bg-stone-900"
+              className="group overflow-hidden rounded-2xl border border-stone-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg motion-reduce:transform-none dark:border-stone-800 dark:bg-stone-900"
             >
-              <div
-                className={`flex h-28 items-center justify-center bg-gradient-to-br ${BANNER_COLORS[i % BANNER_COLORS.length]}`}
-              >
-                <HouseIcon className="h-14 w-14 text-white/90" />
-              </div>
+              <PropertyImage
+                src={projectImage(project.id)}
+                alt={`${project.name} housing project`}
+                size="sm"
+                sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                className="aspect-[16/10]"
+                imgClassName="transition-transform duration-500 group-hover:scale-105 motion-reduce:transform-none"
+              />
               <div className="p-4">
                 <div className="flex items-start justify-between gap-2">
-                  <h3 className="font-semibold text-stone-900 group-hover:text-amber-600 dark:text-white dark:group-hover:text-amber-400">
+                  <h3 className="font-semibold text-stone-900 group-hover:text-brand-700 dark:text-white dark:group-hover:text-brand-300">
                     {project.name}
                   </h3>
                   <span className={statusBadgeClass(project.status)}>{project.status}</span>

@@ -3,7 +3,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import client from '../api/client';
 import { statusBadgeClass } from '../utils/statusBadge';
-import HouseIcon from '../components/illustrations/HouseIcon';
+import PropertyImage from '../components/PropertyImage';
+import { projectImage } from '../utils/images';
 
 const emptyUnitForm = {
   unit_number: '',
@@ -68,11 +69,15 @@ export default function HousingProjectDetail() {
 
   return (
     <div>
-      <div className="mb-4 flex items-start gap-5 overflow-hidden rounded-xl border border-stone-200 bg-white dark:border-stone-800 dark:bg-stone-900">
-        <div className="flex h-full w-28 shrink-0 items-center justify-center self-stretch bg-gradient-to-br from-amber-400 to-amber-600 py-6">
-          <HouseIcon className="h-14 w-14 text-white/90" />
-        </div>
-        <div className="flex-1 py-5 pr-5">
+      <div className="mb-4 overflow-hidden rounded-2xl border border-stone-200 bg-white shadow-sm dark:border-stone-800 dark:bg-stone-900">
+        <PropertyImage
+          src={projectImage(project.id)}
+          alt={`${project.name} housing project`}
+          eager
+          sizes="(min-width: 1024px) 64rem, 100vw"
+          className="aspect-[16/7] max-h-72 w-full"
+        />
+        <div className="p-5">
           <div className="flex items-start justify-between gap-2">
             <div>
               <h1 className="text-xl font-semibold text-stone-900 dark:text-white">{project.name}</h1>

@@ -1,0 +1,54 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "name": "Arusha",
+      "slug": "arusha",
+      "type": "city",
+      "parent_slug": null,
+      "latitude": null,
+      "longitude": null,
+      "properties_count": 1
+    },
+    {
+      "id": 2,
+      "name": "Dar es Salaam",
+      "slug": "dar-es-salaam",
+      "type": "city",
+      "parent_slug": null,
+      "latitude": null,
+      "longitude": null,
+      "properties_count": 8
+    },
+    {
+      "id": 3,
+      "name": "Dodoma",
+      "slug": "dodoma",
+      "type": "city",
+      "parent_slug": null,
+      "latitude": null,
+      "longitude": null,
+      "properties_count": 1
+    },
+    {
+      "id": 4,
+      "name": "Mwanza",
+      "slug": "mwanza",
+      "type": "city",
+      "parent_slug": null,
+      "latitude": null,
+      "longitude": null,
+      "properties_count": 1
+    },
+    {
+      "id": 5,
+      "name": "Zanzibar",
+      "slug": "zanzibar",
+      "type": "city",
+      "parent_slug": null,
+      "latitude": null,
+      "longitude": null,
+      "properties_count": 1
+    }
+  ]
+}

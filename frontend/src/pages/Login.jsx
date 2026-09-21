@@ -12,7 +12,7 @@ export default function Login() {
   const [submitting, setSubmitting] = useState(false);
 
   if (user) {
-    return <Navigate to={location.state?.from ?? '/'} replace />;
+    return <Navigate to={location.state?.from ?? '/dashboard'} replace />;
   }
 
   async function handleSubmit(event) {
@@ -32,7 +32,7 @@ export default function Login() {
 
   return (
     <AuthSplitLayout>
-      <h1 className="text-2xl font-semibold text-stone-900 dark:text-white">Welcome back</h1>
+      <h1 className="text-2xl font-extrabold tracking-tight text-stone-900 dark:text-white">Welcome back</h1>
       <p className="mt-1 text-sm text-stone-500 dark:text-stone-400">
         Sign in to continue to your account
       </p>
@@ -77,7 +77,7 @@ export default function Login() {
 
       <p className="mt-6 text-center text-sm text-stone-500 dark:text-stone-400">
         Applying for housing for the first time?{' '}
-        <Link to="/register" className="font-medium text-amber-600 dark:text-amber-400">
+        <Link to="/register" className="font-medium text-brand-700 hover:underline dark:text-brand-300">
           Create an account
         </Link>
       </p>

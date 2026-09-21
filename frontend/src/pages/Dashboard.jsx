@@ -5,7 +5,7 @@ import { statusBadgeClass } from '../utils/statusBadge';
 function StatTile({ label, value, accent }) {
   return (
     <div className="card">
-      <div className={`text-3xl font-bold ${accent ? 'text-amber-600 dark:text-amber-400' : 'text-stone-900 dark:text-white'}`}>
+      <div className={`text-3xl font-bold ${accent ? 'text-brand-700 dark:text-brand-300' : 'text-stone-900 dark:text-white'}`}>
         {value}
       </div>
       <div className="mt-1 text-sm text-stone-500 dark:text-stone-400">{label}</div>
@@ -40,7 +40,7 @@ export default function Dashboard() {
 
   return (
     <div>
-      <h1 className="mb-6 text-2xl font-semibold text-stone-900 dark:text-white">Dashboard</h1>
+      <h1 className="mb-6 text-2xl font-extrabold tracking-tight text-stone-900 dark:text-white">Dashboard</h1>
 
       <StatSection title="Applications">
         <StatTile label="Total" value={stats.applications.total} />
