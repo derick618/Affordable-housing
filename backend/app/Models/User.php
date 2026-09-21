@@ -5,7 +5,9 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -66,6 +68,23 @@ class User extends Authenticatable
     public function allocationsMade(): HasMany
     {
         return $this->hasMany(Allocation::class, 'allocated_by');
+    }
+
+    /** The marketplace owner profile linked to this login, if any. */
+    public function owner(): HasOne
+    {
+        return $this->hasOne(Owner::class);
+    }
+
+    public function affordabilityProfile(): HasOne
+    {
+        return $this->hasOne(AffordabilityProfile::class);
+    }
+
+    /** Marketplace listings this user has saved. Soft-deleted listings drop out automatically. */
+    public function favoriteProperties(): BelongsToMany
+    {
+        return $this->belongsToMany(Property::class, 'favorites')->withTimestamps();
     }
 
     public function isSuperAdmin(): bool

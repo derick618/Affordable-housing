@@ -47,6 +47,18 @@ return [
             'report' => false,
         ],
 
+        // Marketplace listing photos. Served straight from public/marketplace, so no
+        // `storage:link` symlink is needed (symlinks are awkward on Windows and some hosts).
+        // Point MARKETPLACE_IMAGE_DISK at `s3` (or any disk) to move photos to real storage.
+        'marketplace' => [
+            'driver' => 'local',
+            'root' => public_path('marketplace'),
+            'url' => rtrim(env('APP_URL', 'http://localhost'), '/').'/marketplace',
+            'visibility' => 'public',
+            'throw' => false,
+            'report' => false,
+        ],
+
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),
